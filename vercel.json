@@ -1,0 +1,6 @@
+{
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm --filter @workspace/book-tracker run build",
+  "outputDirectory": "artifacts/book-tracker/dist/public",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
