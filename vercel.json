@@ -4,3 +4,4 @@
   "outputDirectory": "artifacts/book-tracker/dist/public",
   "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
 }
+
