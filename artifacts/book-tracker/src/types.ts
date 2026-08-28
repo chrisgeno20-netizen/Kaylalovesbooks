@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const feelingEnum = z.enum(["dnf", "liked", "really_liked", "loved"]);
+export const feelingEnum = z.enum(["dnf", "fine", "liked", "really_liked", "loved"]);
 export type Feeling = z.infer<typeof feelingEnum>;
 
 export const bookSchema = z.object({

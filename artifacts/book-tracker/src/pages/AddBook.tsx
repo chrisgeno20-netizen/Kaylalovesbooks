@@ -36,6 +36,7 @@ export default function AddBook() {
 
   const feelings: { value: Feeling; label: string }[] = [
     { value: "dnf", label: "DNF" },
+    { value: "fine", label: "Fine" },
     { value: "liked", label: "Liked" },
     { value: "really_liked", label: "Really Liked" },
     { value: "loved", label: "Loved" },
@@ -109,7 +110,7 @@ export default function AddBook() {
                 <FormItem>
                   <FormLabel className="text-sm font-medium">How did you feel about it?</FormLabel>
                   <FormControl>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1" data-testid="group-feeling">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pt-1" data-testid="group-feeling">
                       {feelings.map((f) => (
                         <button
                           key={f.value}

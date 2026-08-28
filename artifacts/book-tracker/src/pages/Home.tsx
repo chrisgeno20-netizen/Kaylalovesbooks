@@ -71,6 +71,7 @@ export default function Home() {
               <SelectContent>
                 <SelectItem value="all">All Feelings</SelectItem>
                 <SelectItem value="dnf">DNF</SelectItem>
+                  <SelectItem value="fine">Fine</SelectItem>
                 <SelectItem value="liked">Liked</SelectItem>
                 <SelectItem value="really_liked">Really Liked</SelectItem>
                 <SelectItem value="loved">Loved</SelectItem>
