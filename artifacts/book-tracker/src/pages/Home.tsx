@@ -13,6 +13,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [filterGenre, setFilterGenre] = useState<string>("all");
   const [filterFeeling, setFilterFeeling] = useState<string>("all");
+  const [sortBy, setSortBy] = useState("recent");
 
   const genres = useMemo(() => {
     if (!books) return [];
@@ -22,7 +23,7 @@ export default function Home() {
 
   const filteredBooks = useMemo(() => {
     if (!books) return [];
-    return books.filter((book) => {
+    const matches = books.filter((book) => {
       const matchesSearch =
         book.title.toLowerCase().includes(search.toLowerCase()) ||
         book.author.toLowerCase().includes(search.toLowerCase());
@@ -30,7 +31,20 @@ export default function Home() {
       const matchesFeeling = filterFeeling === "all" || book.feeling === filterFeeling;
       return matchesSearch && matchesGenre && matchesFeeling;
     });
-  }, [books, search, filterGenre, filterFeeling]);
+
+    if (sortBy === "recent") return matches;
+
+    const [field, direction] = sortBy.split("-");
+    return [...matches].sort((a, b) => {
+      const left = field === "author" ? a.author : a.title;
+      const right = field === "author" ? b.author : b.title;
+      const comparison = left.localeCompare(right, undefined, {
+        sensitivity: "base",
+        numeric: true,
+      });
+      return direction === "desc" ? -comparison : comparison;
+    });
+  }, [books, search, filterGenre, filterFeeling, sortBy]);
 
   return (
     <div className="min-h-[100dvh] bg-background text-foreground pb-24 selection:bg-primary/20">
@@ -51,9 +65,9 @@ export default function Home() {
               data-testid="input-search"
             />
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <Select value={filterGenre} onValueChange={setFilterGenre}>
-              <SelectTrigger className="w-[130px] bg-card border-border/50 shadow-sm" data-testid="select-genre">
+              <SelectTrigger aria-label="Filter by genre" className="w-[calc(50%-4px)] sm:w-[130px] bg-card border-border/50 shadow-sm" data-testid="select-genre">
                 <SelectValue placeholder="Genre" />
               </SelectTrigger>
               <SelectContent>
@@ -65,16 +79,29 @@ export default function Home() {
             </Select>
 
             <Select value={filterFeeling} onValueChange={setFilterFeeling}>
-              <SelectTrigger className="w-[130px] bg-card border-border/50 shadow-sm" data-testid="select-feeling">
+              <SelectTrigger aria-label="Filter by feeling" className="w-[calc(50%-4px)] sm:w-[130px] bg-card border-border/50 shadow-sm" data-testid="select-feeling">
                 <SelectValue placeholder="Feeling" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Feelings</SelectItem>
                 <SelectItem value="dnf">DNF</SelectItem>
-                  <SelectItem value="fine">Fine</SelectItem>
+                <SelectItem value="fine">Fine</SelectItem>
                 <SelectItem value="liked">Liked</SelectItem>
                 <SelectItem value="really_liked">Really Liked</SelectItem>
                 <SelectItem value="loved">Loved</SelectItem>
+              </SelectContent>
+            </Select>
+
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger aria-label="Sort books" className="w-full sm:w-[150px] bg-card border-border/50 shadow-sm" data-testid="select-sort">
+                <SelectValue placeholder="Sort books" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="recent">Recently added</SelectItem>
+                <SelectItem value="title-asc">Title: A to Z</SelectItem>
+                <SelectItem value="title-desc">Title: Z to A</SelectItem>
+                <SelectItem value="author-asc">Author: A to Z</SelectItem>
+                <SelectItem value="author-desc">Author: Z to A</SelectItem>
               </SelectContent>
             </Select>
           </div>
